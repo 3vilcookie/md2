@@ -1,50 +1,63 @@
 /*
- * @file:	md2.c
- * @brief:	Generates a MD5 Hash of a given file
- * @date:	19/04/2018
- * @author:	Raphael Pour <s74020@informatik.htw-dresden.de>
+ * @file:	    md2.c
+ * @brief:	    Generates a MD2 Hash of a given file
+ * @date:	    19/04/2018
+ * @author:	    Raphael Pour <s74020@informatik.htw-dresden.de>
  * @license:	LGPL
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "md2.h"
 
-static unsigned char piDigits[256] = {
-  41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6,
-  19, 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188,
-  76, 130, 202, 30, 155, 87, 60, 253, 212, 224, 22, 103, 66, 111, 24,
-  138, 23, 229, 18, 190, 78, 196, 214, 218, 158, 222, 73, 160, 251,
-  245, 142, 187, 47, 238, 122, 169, 104, 121, 145, 21, 178, 7, 63,
-  148, 194, 16, 137, 11, 34, 95, 33, 128, 127, 93, 154, 90, 144, 50,
-  39, 53, 62, 204, 231, 191, 247, 151, 3, 255, 25, 48, 179, 72, 165,
-  181, 209, 215, 94, 146, 42, 172, 86, 170, 198, 79, 184, 56, 210,
-  150, 164, 125, 182, 118, 252, 107, 226, 156, 116, 4, 241, 69, 157,
-  112, 89, 100, 113, 135, 32, 134, 91, 207, 101, 230, 45, 168, 2, 27,
-  96, 37, 173, 174, 176, 185, 246, 28, 70, 97, 105, 52, 64, 126, 15,
-  85, 71, 163, 35, 221, 81, 175, 58, 195, 92, 249, 206, 186, 197,
-  234, 38, 44, 83, 13, 110, 133, 40, 132, 9, 211, 223, 205, 244, 65,
-  129, 77, 82, 106, 220, 55, 200, 108, 193, 171, 250, 36, 225, 123,
-  8, 12, 189, 177, 74, 120, 136, 149, 139, 227, 99, 232, 109, 233,
-  203, 213, 254, 59, 0, 29, 57, 242, 239, 183, 14, 102, 88, 208, 228,
-  166, 119, 114, 248, 235, 117, 75, 10, 49, 68, 80, 180, 143, 237,
-  31, 26, 219, 153, 141, 51, 159, 17, 131, 20
-};
-
-const unsigned short BLOCK_LENGTH = 16;
-
-const unsigned char* md2hash(const char *input, size_t length);
-void dump(const unsigned char* buffer, const size_t length);
-
-int main(int argc, char* argv[])
+int main(int argc, char* argv[]) // {{{
 {
+    FILE *inputFile;
 
-    dump(md2hash("Raphael Pour",12),16);
+    if(argc < 2)
+        inputFile = stdin;
+    else 
+    {
+        inputFile = fopen(argv[1],"rb");
+        if(inputFile == NULL)
+        {
+            perror("Error opening input file");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    char buffer[BUFFER_LENGTH];
+    char *message = NULL;
+    size_t length = 0;
+    while(!feof(inputFile))
+    {
+        size_t read=0;
+        read = fread(&buffer,1, BUFFER_LENGTH, inputFile);
+
+        if(read == 0)
+        {
+            if(feof(inputFile))
+                break;
+            printf("Error on reading file: %i\n", ferror(inputFile));
+            exit(EXIT_FAILURE);
+        }
+
+        message = realloc(message, length+read);
+        if(message == NULL)
+        {
+            perror("Error on allocating memory for input file");
+            exit(EXIT_FAILURE);
+        }
+
+        memcpy((message+length),&buffer,read);
+        length += read;
+    }
+
+    printf("Read: %lu\n",length);
+    dump(md2hash(message,length),16);
 
     return EXIT_SUCCESS;
-}
+} //}}}
 
-const unsigned char* md2hash(const char *input, size_t length)
+const unsigned char* md2hash(const char *input, size_t length)//{{{
 {
     size_t paddingLength = BLOCK_LENGTH - (length % BLOCK_LENGTH);
     size_t i,j,k;
@@ -52,8 +65,9 @@ const unsigned char* md2hash(const char *input, size_t length)
     size_t length2 = length + paddingLength;
 
     
-    printf("Raw input -----------\n");
-    dump((const unsigned char*)input,length);
+    
+    //printf("Raw input -----------\n");
+    //dump((const unsigned char*)input,length);
 
     // 1) Pad message so that its length is a multiple of 16
     unsigned char *paddedInput;
@@ -62,8 +76,8 @@ const unsigned char* md2hash(const char *input, size_t length)
     if(length)
         memcpy(paddedInput, input,length);
 
-    printf("Unpadded input ------\n");
-    dump(paddedInput, length2);
+    //printf("Unpadded input ------\n");
+    //dump(paddedInput, length2);
 
     if(paddedInput == NULL)
     {
@@ -75,8 +89,8 @@ const unsigned char* md2hash(const char *input, size_t length)
     for(i=0;i<paddingLength;i++)
         paddedInput[length+i] = paddingLength;
     
-    printf("padded input --------\n");
-    dump(paddedInput,length2);
+    //printf("padded input --------\n");
+    //dump(paddedInput,length2);
 
     // 2) Calculate Checksum
     unsigned char checksum[BLOCK_LENGTH];
@@ -84,8 +98,8 @@ const unsigned char* md2hash(const char *input, size_t length)
     for(i=0;i<BLOCK_LENGTH;i++)
         checksum[i] = 0;
     
-    printf("Empty Checksum --------\n");
-    dump(checksum,BLOCK_LENGTH);
+    //printf("Empty Checksum --------\n");
+    //dump(checksum,BLOCK_LENGTH);
 
     unsigned char L = 0;
 
@@ -96,8 +110,8 @@ const unsigned char* md2hash(const char *input, size_t length)
           checksum[j] ^= piDigits[c^L];
           L = checksum[j]; 
         }
-    printf("Checksum ------------\n");
-    dump(checksum,16);
+    //printf("Checksum ------------\n");
+    //dump(checksum,16);
 
 
     length3 = length + paddingLength + 16;
@@ -138,15 +152,15 @@ const unsigned char* md2hash(const char *input, size_t length)
         }
     }   
     
-    dump(X,48);
+    //dump(X,48);
 
     unsigned char *output = (unsigned char*)malloc(16);
 
     memcpy(output,(void*)X,16);
     return output;
-}
+}//}}}
 
-void dump(unsigned const char* buffer, const size_t length)
+void dump(unsigned const char* buffer, const size_t length)//{{{
 {
     size_t i;
     for(i=0;i<length;i++)
@@ -159,4 +173,4 @@ void dump(unsigned const char* buffer, const size_t length)
             printf(" ");
     }
     puts("");
-}
+}//}}}
