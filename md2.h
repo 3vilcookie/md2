@@ -9,14 +9,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-static unsigned char testHash[] = {
+
+// Make own types in order to not mix it up with others
+typedef unsigned char HASHTYPE;
+typedef size_t HASHLENGTH;
+
+static HASHTYPE testHash[] = {
     0x83, 0x50, 0xe5, 0xa3, 
     0xe2, 0x4c, 0x15, 0x3d, 
     0xf2, 0x27, 0x5c, 0x9f,
     0x80, 0x69, 0x27, 0x73
 };
 
-static unsigned char piDigits[256] = {
+static HASHTYPE piDigits[256] = {
   41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6,
   19, 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188,
   76, 130, 202, 30, 155, 87, 60, 253, 212, 224, 22, 103, 66, 111, 24,
@@ -39,7 +44,9 @@ static unsigned char piDigits[256] = {
 
 const unsigned short BLOCK_LENGTH = 16;
 const unsigned BUFFER_LENGTH = 1024*10;
+const unsigned short ITERATION_COUNT = 18;
 
-const unsigned char* md2hash(const unsigned char *input, const size_t length);
-void dump(const unsigned char* buffer, const size_t length);
+
+const HASHTYPE* md2hash(const unsigned char *input, const HASHLENGTH length);
+void dump(const HASHTYPE* buffer, const HASHLENGTH length);
 
