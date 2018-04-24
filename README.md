@@ -22,6 +22,13 @@ Hash whole file
 
 `md2 debian.iso`
 
+Test hashing function
+
+`md2 -t`
+
+Show help
+
+`md2 -h`
 ## Reference
 
 - RFC of the MD2-Algorithm with C Codeexample: http://www.faqs.org/rfcs/rfc1319.html
