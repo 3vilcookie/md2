@@ -12,6 +12,8 @@ Clone of the cracked, obsolete but easy to implement Message-Digest-2 hashing al
 2. cd md2
 3. make
 
+Tested on Windows 10 and Debian 8.
+
 ## Usage
 
 Hash a single string
