@@ -3,7 +3,7 @@
  * @brief:	    Generates a MD2 Hash of a given file
  * @date:	    19/04/2018
  * @author:	    Raphael Pour <s74020@informatik.htw-dresden.de>
- * @license:	LGPL
+ * @license:	GPL
  */
 
 #include "md2.h"
