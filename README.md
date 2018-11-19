@@ -39,4 +39,4 @@ Show help
 
 
 # License
-LGPL (https://www.gnu.org/copyleft/lesser.html)
+GPL 
