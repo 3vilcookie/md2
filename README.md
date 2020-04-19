@@ -1,4 +1,4 @@
-# md2
+# md2 [![Build Status](https://travis-ci.com/3vilcookie/md2.svg?branch=master)](https://travis-ci.com/3vilcookie/md2)
 
 Clone of the cracked, obsolete but easy to implement Message-Digest-2 hashing algorithm.
 
