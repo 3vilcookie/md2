@@ -5,6 +5,8 @@
  * @author:	    Raphael Pour <s74020@informatik.htw-dresden.de>
  * @license:	GPL
  */
+#ifndef HASH_H
+#define HASH_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,11 +44,12 @@ static HASHTYPE piDigits[ 256 ] = {//{{{
   31, 26, 219, 153, 141, 51, 159, 17, 131, 20
 };//}}}
 
-const unsigned short BLOCK_LENGTH = 16;
-const unsigned BUFFER_LENGTH = 1024*10;
-const unsigned short ITERATION_COUNT = 18;
+#define BLOCK_LENGTH 16
+#define BUFFER_LENGTH (1024*10)
+#define ITERATION_COUNT 18
 
 
 const HASHTYPE* md2hash( const unsigned char *input, const HASHLENGTH length );
 void dump( const HASHTYPE* buffer, const HASHLENGTH length );
 
+#endif // HASH_H
