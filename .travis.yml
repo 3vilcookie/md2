@@ -10,18 +10,15 @@ script:
   - curl -Ls https://git.io/ttask.sh | sh
   - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin
   - "./bin/task ci"
+  - "./bin/task bin"
 
 deploy:
-  script:
-    - curl -Ls https://git.io/ttask.sh | sh
-    - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin
-    - "./bin/task bin"
   provider: releases
   token:
     secure: eigHQr2NVOwNabKMwkUPcHN3RSR0DbjHtWrZs128njANjduDtZp4qVDG/WHE+EfxgnX0By11x31C0GyB1UyCDYH1HLCgK/9WqvSo5nrnEyn7Oi8H7w1MlDI9lEG4+/GbaqzdFyddTbHHIVLmeKQ9ggkcy/H4h4E887wpsWEgqgorJ9hIuLgzFkX+s37/MLRruXJs2Rk9ELZ4wpwUh6xRrvPesM8XHp6PA/Er221VP2dA1EDnDHT7IO/kf461HW+12mV+n0AUyLQbtwdmLXMv7ed9YLe+HqNAJUpuXpey0FmgE1MYYGsxQnMEEv3JmN7ygVU2wl+INL1D9NSlDzzAtVBNgjF5/DB4IPYotw0fkGfBYvxZQ9e7wAVFZTvtycIL4YhZzOhZuQYGrRnCoEYul+l0w51shlvMxJf5ZRYdwf50hNn6DX7lohFwHfnieVRTxQiMcamwWXDAyZCqZZcfKmHeK8JLPrQcx0iceyPYqKi4wXrq/cq6wLX7CKzdqUuGvYmji392Hl+QLKv3ME6iKGl6FqGbm4HgbjwDul/taDtNX+0n9TghgDBrGVfeQ4GkqI8ZJNMUMkdhedKrLB/jABXCvzeZukw7P116VkD9ZdQzh8QpLXw3ztUwfjCkLA8+ANfUsoMIOYaGAL0qSIzr6a+D9FHfRdHHM3Iz7zGg23A=
   file_glob: true
   file: ci-build/*
-  cleanup: false
+  skip_cleanup: true
   on:
     repo: 3vilcookie/md2
     tags: true
