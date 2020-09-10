@@ -20,5 +20,5 @@ deploy:
   file: ci-build/*
   skip_cleanup: true
   on:
-    repo: 3vilcookie/md2
+    repo: RaphaelPour/md2
     tags: true
